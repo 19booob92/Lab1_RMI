@@ -32,9 +32,8 @@ public class MonitorImpl extends RegisterDecorator implements IMonitor {
 		this.number = number;
 	}
 
-
 	@Override
-	protected void stateChange() throws RemoteException {
+	public void stateChange() throws RemoteException {
 		for (Object sensor : remoteRegistry.getObjects(0)) {
 			SensorImpl sensorsImpl = (SensorImpl) sensor;
 			System.out.println(sensorsImpl.getNumber() + " jest na pozycji: " + sensorsImpl.getPosition());

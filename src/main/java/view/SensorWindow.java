@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JTextArea;
 
 import mainPack.ISensor;
 import mainPack.SensorImpl;
@@ -18,6 +19,9 @@ public class SensorWindow extends JFrame {
 
     private ISensor sensor;
 
+    private JTextArea ipTA;
+    private JTextArea portTA;
+    
     private JButton createSensorBtn;
 
     public SensorWindow() {
@@ -30,6 +34,10 @@ public class SensorWindow extends JFrame {
 
         createSensorBtn = new JButton("Add sens");
 
+        portTA = new JTextArea();
+        ipTA = new JTextArea();
+        
+        
         add(createSensorBtn);
 
         initListeners();
@@ -38,8 +46,11 @@ public class SensorWindow extends JFrame {
     private void initListeners() {
         createSensorBtn.addActionListener(l -> {
             System.out.println("Uruchomiono");
+            
+            String ip = ipTA.getText();
+            int portNo = Integer.valueOf(portTA.getText());
             try {
-                sensor = new SensorImpl("192.168.0.1", 8080);
+                sensor = new SensorImpl(ip, portNo);
             } catch (Exception e) {
                 e.printStackTrace();
             }
