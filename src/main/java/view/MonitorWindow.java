@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import mainPack.IMonitor;
+import mainPack.MonitorImpl;
 
 
 public class MonitorWindow extends JFrame {
@@ -15,7 +16,7 @@ public class MonitorWindow extends JFrame {
 
     private IMonitor monitor;
 
-    private JButton createSensorBtn;
+    private JButton createMonitorBtn;
 
     public MonitorWindow() {
         super("Monitor");
@@ -25,8 +26,18 @@ public class MonitorWindow extends JFrame {
         setVisible(true);
         setLayout(new FlowLayout());
 
-        createSensorBtn = new JButton("Add sens");
+        createMonitorBtn = new JButton("Run !");
 
-        add(createSensorBtn);
+        add(createMonitorBtn);
+    }
+    
+    private void setListeners() {
+        createMonitorBtn.addActionListener(l -> {
+            try {
+                monitor = new MonitorImpl("192.168.0.1", 8080);
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }});
     }
 }

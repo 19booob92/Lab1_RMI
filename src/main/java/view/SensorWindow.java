@@ -9,12 +9,13 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import mainPack.ISensor;
+import mainPack.SensorImpl;
 
 
-public class SensorWindow extends JFrame{
+public class SensorWindow extends JFrame {
 
     private static final long serialVersionUID = 1L;
-    
+
     private ISensor sensor;
 
     private JButton createSensorBtn;
@@ -35,11 +36,12 @@ public class SensorWindow extends JFrame{
     }
 
     private void initListeners() {
-        createSensorBtn.addActionListener(new ActionListener() {
-            
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                System.out.println("Uruchomiono");
+        createSensorBtn.addActionListener(l -> {
+            System.out.println("Uruchomiono");
+            try {
+                sensor = new SensorImpl("192.168.0.1", 8080);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
     }

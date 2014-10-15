@@ -17,7 +17,7 @@ public class RegistryImpl extends UnicastRemoteObject implements IRegistry {
 	private static int id = 0;
 	private Registry registry;
 
-	protected RegistryImpl() throws RemoteException, AlreadyBoundException {
+	public RegistryImpl() throws RemoteException, AlreadyBoundException {
 		super();
 		registry = LocateRegistry.createRegistry(8080);
 		registry.bind("remoteRegisty", this);
