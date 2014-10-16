@@ -2,6 +2,7 @@ package view;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.net.URI;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -11,15 +12,14 @@ import mainPack.IMonitor;
 import mainPack.MonitorImpl;
 
 
-public class MonitorWindow extends JFrame {
+public class MonitorWindow extends SuperView {
 
     private static final long serialVersionUID = 1112312312L;
 
     private IMonitor monitor;
 
     private JButton createMonitorBtn;
-    private JButton refreshBtn;
-    
+
     public MonitorWindow() {
         super("Monitor");
 
@@ -29,24 +29,51 @@ public class MonitorWindow extends JFrame {
         setLayout(new FlowLayout());
 
         createMonitorBtn = new JButton("Run !");
-        refreshBtn = new JButton("Refresh");
 
+        registerBtn = new JButton("register");
+        unregisterBtn = new JButton("unregister");
+        refreshBtn = new JButton("refresh");
+        
         add(createMonitorBtn);
+
+        setVisible(true);
     }
-    
+
     private void setListeners() {
         createMonitorBtn.addActionListener(l -> {
+            String ip = ipTA.getText();
+            int portNo = Integer.valueOf(portTA.getText());
             try {
-                monitor = new MonitorImpl("192.168.0.1", 8080);
+                monitor = new MonitorImpl(ip, portNo);
             } catch (Exception e) {
                 e.printStackTrace();
-            }});
-        
-        refreshBtn.addActionListener(l -> {
+            }
+        });
+
+        this.refreshBtn.addActionListener(l -> {
             try {
                 monitor.change();
             } catch (Exception e) {
                 e.printStackTrace();
-            }});
+            }
+        });
+        
+        this.registerBtn.addActionListener(l -> {
+            try {
+                monitor.register();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        
+        this.registerBtn.addActionListener(l -> {
+            try {
+                monitor.unregister();
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        });
+        
     }
 }

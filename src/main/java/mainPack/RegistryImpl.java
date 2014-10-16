@@ -7,8 +7,6 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
-import view.SensorWindow;
-
 public class RegistryImpl extends UnicastRemoteObject implements IRegistry {
 
 	private ArrayList<Object> sensors;

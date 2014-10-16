@@ -1,19 +1,22 @@
 package mainPack;
 
 
+import static java.lang.System.out;
+
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
 
-import static java.lang.System.*;
 import utils.RegistryUtils;
 
-public class MonitorImpl extends RegisterDecorator implements IMonitor {
+
+public class MonitorImpl implements IMonitor {
 
 	private int number;
 	
 	private Registry registry;
 	
+    protected IRegistry remoteRegistry;
 	
 	public MonitorImpl(String ip, int port) throws RemoteException, NotBoundException {
 		registry = RegistryUtils.setRegistry(ip, port);
@@ -40,8 +43,14 @@ public class MonitorImpl extends RegisterDecorator implements IMonitor {
 		}
 	}
 
-    public void refresh() throws RemoteException {
-        stateChange();
+    @Override
+    public void register() throws RemoteException {
+        remoteRegistry.registerObject(this, 0);
+    }
+
+    @Override
+    public void unregister() throws RemoteException {
+        remoteRegistry.unRegister(this.number);
     }
 	
 }

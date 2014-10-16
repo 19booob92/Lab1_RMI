@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 import utils.RegistryUtils;
 
 
-public class SensorImpl extends RegisterDecorator implements ISensor {
+public class SensorImpl implements ISensor {
 
     private String position;
     private Random random;
@@ -19,8 +19,10 @@ public class SensorImpl extends RegisterDecorator implements ISensor {
     private String read;
 
     private Registry registry;
+    protected IRegistry remoteRegistry;
 
     public SensorImpl(String ip, int port) throws RemoteException, NotBoundException {
+        
         setPosition("0,0");
         registry = RegistryUtils.setRegistry(ip, port);
         remoteRegistry = (IRegistry) registry.lookup("remoteRegisty");
@@ -88,11 +90,21 @@ public class SensorImpl extends RegisterDecorator implements ISensor {
     }
 
     @Override
-    protected void stateChange() throws RemoteException {
+    public void stateChange() throws RemoteException {
         for (Object monitor : remoteRegistry.getObjects(1)) {
             MonitorImpl monitorImpl = (MonitorImpl) monitor;
             monitorImpl.change();
         }
     }
 
+    @Override
+    public void register() throws RemoteException {
+        remoteRegistry.registerObject(this, 1);
+    }
+
+    @Override
+    public void unregister() throws RemoteException {
+        remoteRegistry.unRegister(this.number);
+    }
+    
 }

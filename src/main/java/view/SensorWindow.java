@@ -1,44 +1,40 @@
 package view;
 
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JTextArea;
 
 import mainPack.ISensor;
 import mainPack.SensorImpl;
 
 
-public class SensorWindow extends JFrame {
+public class SensorWindow extends SuperView {
 
     private static final long serialVersionUID = 1L;
 
     private ISensor sensor;
 
-    private JTextArea ipTA;
-    private JTextArea portTA;
-    
     private JButton createSensorBtn;
+    private JButton startBtn;
+    private JButton stopBtn;
 
     public SensorWindow() {
         super("Sensor");
 
-        setSize(new Dimension(200, 200));
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setVisible(true);
-        setLayout(new FlowLayout());
-
         createSensorBtn = new JButton("Add sens");
 
-        portTA = new JTextArea();
-        ipTA = new JTextArea();
-        
+        startBtn = new JButton("start");
+        stopBtn = new JButton("stop");
+        registerBtn = new JButton("register");
+        unregisterBtn = new JButton("unregister");
+        refreshBtn = new JButton("refresh");
         
         add(createSensorBtn);
+        add(startBtn);
+        add(stopBtn);
+        add(refreshBtn);
+        add(registerBtn);
+        add(unregisterBtn);
+
+        setVisible(true);
 
         initListeners();
     }
@@ -46,11 +42,51 @@ public class SensorWindow extends JFrame {
     private void initListeners() {
         createSensorBtn.addActionListener(l -> {
             System.out.println("Uruchomiono");
-            
+
             String ip = ipTA.getText();
             int portNo = Integer.valueOf(portTA.getText());
             try {
                 sensor = new SensorImpl(ip, portNo);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        startBtn.addActionListener(l -> {
+            try {
+                sensor.start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        stopBtn.addActionListener(l -> {
+            try {
+                sensor.stop();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        this.refreshBtn.addActionListener(l -> {
+            try {
+                sensor.stateChange();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        this.registerBtn.addActionListener(l -> {
+            try {
+                sensor.register();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        this.unregisterBtn.addActionListener(l -> {
+            try {
+                sensor.unregister();
             } catch (Exception e) {
                 e.printStackTrace();
             }

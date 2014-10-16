@@ -4,7 +4,7 @@ package mainPack;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-public interface ISensor extends Remote{
+public interface ISensor extends Remote, MainInterface{
 	
 	boolean start() throws RemoteException;
 	boolean stop() throws RemoteException;
