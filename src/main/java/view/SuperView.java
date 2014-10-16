@@ -15,7 +15,6 @@ public class SuperView extends JFrame {
 
     protected JButton registerBtn;
     protected JButton unregisterBtn;
-    protected JButton refreshBtn;
     
     public SuperView(String name) {
         super(name);

@@ -3,14 +3,17 @@ package mainPack;
 
 import static java.lang.System.out;
 
+import java.net.MalformedURLException;
+import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 
 import utils.RegistryUtils;
 
 
-public class MonitorImpl implements IMonitor {
+public class MonitorImpl extends UnicastRemoteObject implements IMonitor {
 
 	private int number;
 	
@@ -18,9 +21,9 @@ public class MonitorImpl implements IMonitor {
 	
     protected IRegistry remoteRegistry;
 	
-	public MonitorImpl(String ip, int port) throws RemoteException, NotBoundException {
-		registry = RegistryUtils.setRegistry(ip, port);
-		remoteRegistry = (IRegistry) registry.lookup("remoteRegisty");
+	public MonitorImpl(String ip, int port) throws RemoteException, NotBoundException, MalformedURLException {
+	    remoteRegistry = (IRegistry) Naming.lookup("rmi://" + ip + "/remoteRegisty");
+	    System.err.println("Created Monitor");
 	}
 	
 	public void change() throws RemoteException {

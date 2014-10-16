@@ -2,54 +2,51 @@ package mainPack;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
 public class RegistryImpl extends UnicastRemoteObject implements IRegistry {
 
-	private ArrayList<Object> sensors;
-	private ArrayList<Object> monitors;
+	private ArrayList<Object> sensors = new ArrayList<>();
+	private ArrayList<Object> monitors = new ArrayList<>();
 
 	private static int id = 0;
-	private Registry registry;
 
 	public RegistryImpl() throws RemoteException, AlreadyBoundException {
 		super();
-		registry = LocateRegistry.createRegistry(8080);
-		registry.bind("remoteRegisty", this);
 	}
 
 	private static final long serialVersionUID = -388878129705895055L;
 
 	public int registerObject(Object object, int category)
 			throws RemoteException {
-		if (category == 1) {
-			MonitorImpl monitor = (MonitorImpl) object;
-			monitor.setNumber(nextId());
+		if (category == 0) {
+			IMonitor monitor = (IMonitor) object;
 			monitors.add(monitor);
-			return monitor.getNumber();
+			System.err.println("Registred Monitor");
+			return nextId();
 		} else {
-			SensorImpl sensor = (SensorImpl) object;
-			sensor.setNumber(nextId());
+			ISensor sensor = (ISensor) object;
 			sensors.add(sensor);
-			return sensor.getNumber();
+			System.err.println("Registred Sensor");
+			return nextId();
 		}
 	}
 
 	public boolean unRegister(int number) throws RemoteException {
 		for (Object sensor : sensors) {
-			SensorImpl sensorImpl = (SensorImpl) sensor;
+			ISensor sensorImpl = (ISensor) sensor;
 			if (sensorImpl.getNumber() == number) {
 				sensors.remove(sensorImpl);
+				System.err.println("deleted " + sensorImpl.getNumber());
 				return true;
 			}
 		}
 		for (Object monitor : monitors) {
-			MonitorImpl monitorImpl = (MonitorImpl) monitor;
+			IMonitor monitorImpl = (IMonitor) monitor;
 			if (monitorImpl.getNumber() == number) {
 				sensors.remove(monitorImpl);
+				System.err.println("deleted " + monitorImpl.getNumber());
 				return true;
 			}
 		}

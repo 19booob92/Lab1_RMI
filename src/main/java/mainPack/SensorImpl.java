@@ -1,7 +1,11 @@
 package mainPack;
+
+import java.net.MalformedURLException;
+import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -10,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 import utils.RegistryUtils;
 
 
-public class SensorImpl implements ISensor {
+public class SensorImpl extends UnicastRemoteObject implements ISensor {
 
     private String position;
     private Random random;
@@ -21,11 +25,10 @@ public class SensorImpl implements ISensor {
     private Registry registry;
     protected IRegistry remoteRegistry;
 
-    public SensorImpl(String ip, int port) throws RemoteException, NotBoundException {
+    public SensorImpl(String ip, int port) throws RemoteException, NotBoundException, MalformedURLException {
         
         setPosition("0,0");
-        registry = RegistryUtils.setRegistry(ip, port);
-        remoteRegistry = (IRegistry) registry.lookup("remoteRegisty");
+        remoteRegistry = (IRegistry) Naming.lookup("rmi://" + ip + "/remoteRegisty");
         scheduler = Executors.newScheduledThreadPool(1);
         randomValue();
     }
@@ -92,14 +95,14 @@ public class SensorImpl implements ISensor {
     @Override
     public void stateChange() throws RemoteException {
         for (Object monitor : remoteRegistry.getObjects(1)) {
-            MonitorImpl monitorImpl = (MonitorImpl) monitor;
-            monitorImpl.change();
+            IMonitor monitorImpl = (IMonitor) monitor;
+            monitorImpl.stateChange();
         }
     }
 
     @Override
     public void register() throws RemoteException {
-        remoteRegistry.registerObject(this, 1);
+        this.number = remoteRegistry.registerObject(this, 1);
     }
 
     @Override

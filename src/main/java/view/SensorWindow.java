@@ -1,9 +1,12 @@
 package view;
 
+import java.awt.EventQueue;
+
 import javax.swing.JButton;
 
 import mainPack.ISensor;
 import mainPack.SensorImpl;
+import mainPackage.SensorMain;
 
 
 public class SensorWindow extends SuperView {
@@ -15,6 +18,8 @@ public class SensorWindow extends SuperView {
     private JButton createSensorBtn;
     private JButton startBtn;
     private JButton stopBtn;
+    private JButton refreshBtn;
+
 
     public SensorWindow() {
         super("Sensor");
@@ -26,7 +31,7 @@ public class SensorWindow extends SuperView {
         registerBtn = new JButton("register");
         unregisterBtn = new JButton("unregister");
         refreshBtn = new JButton("refresh");
-        
+
         add(createSensorBtn);
         add(startBtn);
         add(stopBtn);
@@ -45,11 +50,13 @@ public class SensorWindow extends SuperView {
 
             String ip = ipTA.getText();
             int portNo = Integer.valueOf(portTA.getText());
-            try {
-                sensor = new SensorImpl(ip, portNo);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            EventQueue.invokeLater(() -> {
+                try {
+                    sensor = new SensorImpl(ip, portNo);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
         });
 
         startBtn.addActionListener(l -> {
@@ -71,6 +78,7 @@ public class SensorWindow extends SuperView {
         this.refreshBtn.addActionListener(l -> {
             try {
                 sensor.stateChange();
+                System.err.println("State is changed");
             } catch (Exception e) {
                 e.printStackTrace();
             }

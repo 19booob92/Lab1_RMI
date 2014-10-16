@@ -32,14 +32,19 @@ public class MonitorWindow extends SuperView {
 
         registerBtn = new JButton("register");
         unregisterBtn = new JButton("unregister");
-        refreshBtn = new JButton("refresh");
+        
+        add(registerBtn);
+        add(unregisterBtn);
         
         add(createMonitorBtn);
 
+        setListeners();
+        
         setVisible(true);
     }
 
     private void setListeners() {
+        
         createMonitorBtn.addActionListener(l -> {
             String ip = ipTA.getText();
             int portNo = Integer.valueOf(portTA.getText());
@@ -50,14 +55,6 @@ public class MonitorWindow extends SuperView {
             }
         });
 
-        this.refreshBtn.addActionListener(l -> {
-            try {
-                monitor.change();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        
         this.registerBtn.addActionListener(l -> {
             try {
                 monitor.register();
@@ -70,7 +67,6 @@ public class MonitorWindow extends SuperView {
             try {
                 monitor.unregister();
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         });
