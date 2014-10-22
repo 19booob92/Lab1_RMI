@@ -11,8 +11,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import utils.RegistryUtils;
-
 
 public class SensorImpl extends UnicastRemoteObject implements ISensor {
 
@@ -22,7 +20,6 @@ public class SensorImpl extends UnicastRemoteObject implements ISensor {
     private int number;
     private String read;
 
-    private Registry registry;
     protected IRegistry remoteRegistry;
 
     public SensorImpl(String ip, int port) throws RemoteException, NotBoundException, MalformedURLException {
@@ -78,7 +75,7 @@ public class SensorImpl extends UnicastRemoteObject implements ISensor {
                 stringBuilder.append(random.nextInt(15));
             }
 
-        }, 1, 1, TimeUnit.MINUTES);
+        }, 15, 15, TimeUnit.SECONDS);
 
         read = stringBuilder.toString();
     }
@@ -94,7 +91,7 @@ public class SensorImpl extends UnicastRemoteObject implements ISensor {
 
     @Override
     public void stateChange() throws RemoteException {
-        for (Object monitor : remoteRegistry.getObjects(1)) {
+        for (Object monitor : remoteRegistry.getObjects(0)) {
             IMonitor monitorImpl = (IMonitor) monitor;
             monitorImpl.stateChange();
         }

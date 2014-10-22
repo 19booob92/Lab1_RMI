@@ -63,7 +63,7 @@ public class MonitorWindow extends SuperView {
             }
         });
         
-        this.registerBtn.addActionListener(l -> {
+        this.unregisterBtn.addActionListener(l -> {
             try {
                 monitor.unregister();
             } catch (Exception e) {

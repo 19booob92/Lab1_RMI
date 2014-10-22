@@ -15,9 +15,9 @@ import utils.RegistryUtils;
 
 public class MonitorImpl extends UnicastRemoteObject implements IMonitor {
 
-	private int number;
-	
-	private Registry registry;
+    private static final long serialVersionUID = -1994726035869244103L;
+
+    private int number;
 	
     protected IRegistry remoteRegistry;
 	
@@ -40,8 +40,8 @@ public class MonitorImpl extends UnicastRemoteObject implements IMonitor {
 
 	@Override
 	public void stateChange() throws RemoteException {
-		for (Object sensor : remoteRegistry.getObjects(0)) {
-			SensorImpl sensorsImpl = (SensorImpl) sensor;
+		for (Object sensor : remoteRegistry.getObjects(1)) {
+			ISensor sensorsImpl = (ISensor) sensor;
 			System.out.println(sensorsImpl.getNumber() + " jest na pozycji: " + sensorsImpl.getPosition());
 		}
 	}
