@@ -10,6 +10,8 @@ import javax.swing.JTextArea;
 
 public class SuperView extends JFrame {
 
+    private static final long serialVersionUID = 3405432966344464354L;
+    
     protected JTextArea ipTA;
     protected JTextArea portTA;
 

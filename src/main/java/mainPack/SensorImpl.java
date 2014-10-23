@@ -1,6 +1,5 @@
 package mainPack;
 
-import java.rmi.RemoteException;
 import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -21,13 +20,12 @@ public class SensorImpl extends Connect implements ISensor {
 
     protected IRegistry remoteRegistry;
 
-    public SensorImpl(String ip, int port) throws RemoteException {
+    public SensorImpl(String ip, int port) {
 
         setIp(ip);
         setPort(port);
-
+        System.out.println("Tworzenie sensrora: " + port + "  " + ip);
         (new Thread()).start();
-        ;
 
         setPosition("0,0");
         scheduler = Executors.newScheduledThreadPool(1);
@@ -68,8 +66,7 @@ public class SensorImpl extends Connect implements ISensor {
             @Override
             public void run() {
                 try {
-                    stateChange();
-
+                    //stateChange();
                 } catch (Exception e) {
                     System.err.println("Nie udalo sie pobrac rejestru");
                 }
@@ -82,6 +79,7 @@ public class SensorImpl extends Connect implements ISensor {
         }, 15, 15, TimeUnit.SECONDS);
 
         read = stringBuilder.toString();
+        write("registerSensor", 9999);
     }
 
     @Override
@@ -115,7 +113,7 @@ public class SensorImpl extends Connect implements ISensor {
 
     @Override
     public void checkRequest(String inputMessage) {
-        MessageUtils.Order order = SensorMessageUtils.parseMessage(inputMessage);
+        MessageUtils.MessageTuple order = SensorMessageUtils.parseMessage(inputMessage);
 
         switch (inputMessage) {
         case "setNumber":

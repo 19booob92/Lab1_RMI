@@ -2,11 +2,8 @@ package view;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.net.URI;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JTextArea;
 
 import mainPack.IMonitor;
 import mainPack.MonitorImpl;

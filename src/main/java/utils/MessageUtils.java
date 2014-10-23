@@ -12,7 +12,7 @@ import javax.xml.soap.SOAPPart;
 
 
 public class MessageUtils {
-    public static String prepareSimpleMessage(Integer port, String host,
+    public static String prepareMsg(Integer port, String host,
             String order, String value) {
 
         System.out.println("Message port: " + port + " host " + host
@@ -69,11 +69,11 @@ public class MessageUtils {
     }
     
 
-    public static class Order {
+    public static class MessageTuple {
         private String request;
         private String content;
         
-        public Order(String reqest, String content) {
+        public MessageTuple(String reqest, String content) {
             this.request = reqest;
             this.content = content;
         }

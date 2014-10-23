@@ -10,12 +10,12 @@ import java.net.Socket;
 
 public abstract class Connect {
 
-    private int port;
-    private String ip;
+    private int port = 9999;
+    private String ip = "127.0.0.1";
 
     public void checkConnections() throws IOException {
         ServerSocket socket = new ServerSocket(port);
-        System.out.println("Runned server");
+        System.out.println("Read");
 
         try {
             Socket client = socket.accept();

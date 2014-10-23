@@ -1,23 +1,29 @@
 package mainPackage;
 
+import java.io.IOException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 
-import mainPack.IRegistry;
 import mainPack.RegistryImpl;
+import utils.Connect;
 
 
-public class RegistryMain {
+public class RegistryMain extends Connect{
 
     public static void main(String[] args) throws RemoteException, AlreadyBoundException {
-        LocateRegistry.createRegistry(1099);
-//        Registry registryDeflaut = LocateRegistry.getRegistry("localhost", 0);
-//        IRegistry registry = new RegistryImpl();
-//        registryDeflaut.bind("remoteRegisty", registry);
         
+        RegistryImpl registry = new RegistryImpl();
+        try {
+            registry.checkConnections();
+        } catch (IOException e) {
+            System.err.println("Nie mozna nawiazac polaczenia");
+            e.printStackTrace();
+        }
         
-        System.err.println("Started Registry");
+    }
+
+    @Override
+    public void checkRequest(String inputMessage) {
+        System.err.println("Wiadomość : " + inputMessage );
     }
 }

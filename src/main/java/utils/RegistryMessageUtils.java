@@ -9,7 +9,7 @@ import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
-import utils.MessageUtils.Order;
+import utils.MessageUtils.MessageTuple;
 
 
 public class RegistryMessageUtils {
@@ -17,15 +17,13 @@ public class RegistryMessageUtils {
             Integer port, String host) {
 
         String order = "Number";
-        return MessageUtils.prepareSimpleMessage(port, host, order,
+        return MessageUtils.prepareMsg(port, host, order,
                 String.valueOf(id));
     }
 
-    public static MessageUtils.Order parseMessage(String message) {
+    public static MessageUtils.MessageTuple parseMessage(String message) {
 
-        System.out.println("Tryaing to read message...");
-
-        MessageUtils.Order order = null;
+        MessageUtils.MessageTuple order = null;
         try {
 
             InputStream is = new ByteArrayInputStream(message.getBytes());
@@ -38,7 +36,7 @@ public class RegistryMessageUtils {
             System.out.println(element.getLocalName());
             System.out.println(element.getValue());
 
-            order = new Order(element.getLocalName(), element.getValue());
+            order = new MessageTuple(element.getLocalName(), element.getValue());
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -58,7 +56,7 @@ public class RegistryMessageUtils {
             int port, String host) {
 
         String order = "PortList";
-        return MessageUtils.prepareSimpleMessage(port, host, order,
+        return MessageUtils.prepareMsg(port, host, order,
                 list);
 
     }

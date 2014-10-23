@@ -1,7 +1,5 @@
 package mainPack;
 
-import java.rmi.AlreadyBoundException;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import utils.Connect;
@@ -20,8 +18,6 @@ public class RegistryImpl extends Connect implements IRegistry {
         setIp("127.0.0.1");
         setPort(9999);
     }
-
-    private static final long serialVersionUID = -388878129705895055L;
 
     public int registerObject(Object object, int category)
     {
@@ -72,7 +68,9 @@ public class RegistryImpl extends Connect implements IRegistry {
 
     @Override
     public void checkRequest(String inputMessage) {
-        MessageUtils.Order order = RegistryMessageUtils.parseMessage(inputMessage);
+        MessageUtils.MessageTuple order = RegistryMessageUtils.parseMessage(inputMessage);
+        
+        System.err.println("dostalm : " + inputMessage);
         
         switch (inputMessage) {
         case "RegistrySensor":

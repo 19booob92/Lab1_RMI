@@ -15,27 +15,26 @@ public class SensorMessageUtils {
             String host) {
 
         String order = "RegistrySensor";
-        return MessageUtils.prepareSimpleMessage(port, host, order, String.valueOf(port));
+        return MessageUtils.prepareMsg(port, host, order, String.valueOf(port));
     }
 
     public static String prepareMessageForOrderToFetchObjects(Integer port,
             String host) {
 
         String order = "FetchMonitors";
-        return MessageUtils.prepareSimpleMessage(port, host, order, String.valueOf(port));
+        return MessageUtils.prepareMsg(port, host, order, String.valueOf(port));
     }
 
     public static String prepareMessageForMonitor(Integer port, String host,
             String value) {
 
         String order = "SensorData";
-        return MessageUtils.prepareSimpleMessage(port, host, order, value);
+        return MessageUtils.prepareMsg(port, host, order, value);
     }
 
-    public static MessageUtils.Order parseMessage(String message) {
+    public static MessageUtils.MessageTuple parseMessage(String message) {
 
-        System.out.println("Tryaing to read message...");
-        MessageUtils.Order order = null;
+        MessageUtils.MessageTuple order = null;
 
         try {
 
@@ -49,7 +48,7 @@ public class SensorMessageUtils {
             System.out.println(element.getLocalName());
             System.out.println(element.getValue());
 
-            order = new MessageUtils.Order(element.getLocalName(), element.getValue());
+            order = new MessageUtils.MessageTuple(element.getLocalName(), element.getValue());
 
         } catch (IOException e) {
             e.printStackTrace();

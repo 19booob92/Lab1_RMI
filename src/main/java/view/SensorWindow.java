@@ -6,7 +6,6 @@ import javax.swing.JButton;
 
 import mainPack.ISensor;
 import mainPack.SensorImpl;
-import mainPackage.SensorMain;
 
 
 public class SensorWindow extends SuperView {
@@ -30,6 +29,7 @@ public class SensorWindow extends SuperView {
         stopBtn = new JButton("stop");
         registerBtn = new JButton("register");
         unregisterBtn = new JButton("unregister");
+        refreshBtn = new JButton("refresh");
         refreshBtn = new JButton("refresh");
 
         add(createSensorBtn);

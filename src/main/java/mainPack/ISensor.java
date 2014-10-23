@@ -1,7 +1,6 @@
 package mainPack;
 
 
-import java.rmi.RemoteException;
 
 public interface ISensor extends MainInterface {
 	
