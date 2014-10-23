@@ -1,18 +1,17 @@
 package mainPack;
 
-import java.net.MalformedURLException;
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import utils.Connect;
+import utils.MessageUtils;
+import utils.SensorMessageUtils;
 
-public class SensorImpl extends UnicastRemoteObject implements ISensor {
+
+public class SensorImpl extends Connect implements ISensor {
 
     private String position;
     private Random random;
@@ -22,36 +21,41 @@ public class SensorImpl extends UnicastRemoteObject implements ISensor {
 
     protected IRegistry remoteRegistry;
 
-    public SensorImpl(String ip, int port) throws RemoteException, NotBoundException, MalformedURLException {
-        
+    public SensorImpl(String ip, int port) throws RemoteException {
+
+        setIp(ip);
+        setPort(port);
+
+        (new Thread()).start();
+        ;
+
         setPosition("0,0");
-        remoteRegistry = (IRegistry) Naming.lookup("rmi://" + ip + "/remoteRegisty");
         scheduler = Executors.newScheduledThreadPool(1);
         randomValue();
     }
 
     @Override
-    public boolean start() throws RemoteException {
+    public boolean start() {
         return true;
     }
 
     @Override
-    public boolean stop() throws RemoteException {
+    public boolean stop() {
         return false;
     }
 
     @Override
-    public String getReading() throws RemoteException {
+    public String getReading() {
         return read;
     }
 
     @Override
-    public void setPosition(String position) throws RemoteException {
+    public void setPosition(String position) {
         this.position = position;
     }
 
     @Override
-    public String getPosition() throws RemoteException {
+    public String getPosition() {
         return position;
     }
 
@@ -66,7 +70,7 @@ public class SensorImpl extends UnicastRemoteObject implements ISensor {
                 try {
                     stateChange();
 
-                } catch (RemoteException e) {
+                } catch (Exception e) {
                     System.err.println("Nie udalo sie pobrac rejestru");
                 }
                 random = new Random(555);
@@ -81,7 +85,7 @@ public class SensorImpl extends UnicastRemoteObject implements ISensor {
     }
 
     @Override
-    public int getNumber() throws RemoteException {
+    public int getNumber() {
         return number;
     }
 
@@ -90,7 +94,7 @@ public class SensorImpl extends UnicastRemoteObject implements ISensor {
     }
 
     @Override
-    public void stateChange() throws RemoteException {
+    public void stateChange() {
         for (Object monitor : remoteRegistry.getObjects(0)) {
             IMonitor monitorImpl = (IMonitor) monitor;
             monitorImpl.stateChange();
@@ -98,13 +102,29 @@ public class SensorImpl extends UnicastRemoteObject implements ISensor {
     }
 
     @Override
-    public void register() throws RemoteException {
-        this.number = remoteRegistry.registerObject(this, 1);
+    public void register() {
+        String message = SensorMessageUtils.prepareMessageForOrderToRegistring(getPort(),
+                getIp());
+        write(message, 9999);
     }
 
     @Override
-    public void unregister() throws RemoteException {
+    public void unregister() {
         remoteRegistry.unRegister(this.number);
     }
-    
+
+    @Override
+    public void checkRequest(String inputMessage) {
+        MessageUtils.Order order = SensorMessageUtils.parseMessage(inputMessage);
+
+        switch (inputMessage) {
+        case "setNumber":
+            setNumber(Integer.parseInt(order.getContent()));
+            break;
+        case "getData":
+            stateChange();
+            break;
+        }
+    }
+
 }

@@ -7,10 +7,7 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-
-import utils.RegistryUtils;
 
 
 public class MonitorImpl extends UnicastRemoteObject implements IMonitor {
@@ -26,11 +23,11 @@ public class MonitorImpl extends UnicastRemoteObject implements IMonitor {
 	    System.err.println("Created Monitor");
 	}
 	
-	public void change() throws RemoteException {
+	public void change() {
 		out.println("zmienio stan");
 	}
 
-	public int getNumber() throws RemoteException {
+	public int getNumber() {
 		return number;
 	}
 	
@@ -39,7 +36,7 @@ public class MonitorImpl extends UnicastRemoteObject implements IMonitor {
 	}
 
 	@Override
-	public void stateChange() throws RemoteException {
+	public void stateChange() {
 		for (Object sensor : remoteRegistry.getObjects(1)) {
 			ISensor sensorsImpl = (ISensor) sensor;
 			System.out.println(sensorsImpl.getNumber() + " jest na pozycji: " + sensorsImpl.getPosition());
@@ -47,12 +44,12 @@ public class MonitorImpl extends UnicastRemoteObject implements IMonitor {
 	}
 
     @Override
-    public void register() throws RemoteException {
+    public void register() {
         remoteRegistry.registerObject(this, 0);
     }
 
     @Override
-    public void unregister() throws RemoteException {
+    public void unregister(){
         remoteRegistry.unRegister(this.number);
     }
 	

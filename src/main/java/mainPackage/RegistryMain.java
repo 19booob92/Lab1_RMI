@@ -13,9 +13,9 @@ public class RegistryMain {
 
     public static void main(String[] args) throws RemoteException, AlreadyBoundException {
         LocateRegistry.createRegistry(1099);
-        Registry registryDeflaut = LocateRegistry.getRegistry("localhost", 0);
-        IRegistry registry = new RegistryImpl();
-        registryDeflaut.bind("remoteRegisty", registry);
+//        Registry registryDeflaut = LocateRegistry.getRegistry("localhost", 0);
+//        IRegistry registry = new RegistryImpl();
+//        registryDeflaut.bind("remoteRegisty", registry);
         
         
         System.err.println("Started Registry");

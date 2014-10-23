@@ -5,10 +5,10 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-public interface IRegistry extends Remote {
+public interface IRegistry {
 
-	int registerObject(Object sensor, int category) throws RemoteException; // 1 : sensor
+	int registerObject(Object sensor, int category); // 1 : sensor
 																			// 0 : monitor
-	boolean unRegister(int number) throws RemoteException;				// < 0 : blad
-	ArrayList<Object> getObjects(int category) throws RemoteException;
+	boolean unRegister(int number);				// < 0 : blad
+	ArrayList<Object> getObjects(int category);
 }

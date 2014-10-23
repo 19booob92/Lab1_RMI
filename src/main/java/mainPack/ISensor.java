@@ -1,15 +1,14 @@
 package mainPack;
 
 
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-public interface ISensor extends Remote, MainInterface{
+public interface ISensor extends MainInterface {
 	
-	boolean start() throws RemoteException;
-	boolean stop() throws RemoteException;
-	String getReading() throws RemoteException;
-	void setPosition(String position) throws RemoteException;
-	String getPosition() throws RemoteException;
-	int getNumber() throws RemoteException;
+	boolean start();
+	boolean stop();
+	String getReading();
+	void setPosition(String position);
+	String getPosition();
+	int getNumber();
 }
