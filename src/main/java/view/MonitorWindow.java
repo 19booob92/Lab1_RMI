@@ -1,11 +1,13 @@
 package view;
 
+
+import ifaces.IMonitor;
+
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 
-import mainPack.IMonitor;
 import mainPack.MonitorImpl;
 
 
@@ -20,7 +22,7 @@ public class MonitorWindow extends SuperView {
     public MonitorWindow() {
         super("Monitor");
 
-        setSize(new Dimension(100, 100));
+        setSize(new Dimension(250, 250));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
         setLayout(new FlowLayout());

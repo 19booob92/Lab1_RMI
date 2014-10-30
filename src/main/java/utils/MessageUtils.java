@@ -7,6 +7,7 @@ import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
+import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
 
@@ -14,9 +15,6 @@ import javax.xml.soap.SOAPPart;
 public class MessageUtils {
     public static String prepareMsg(Integer port, String host,
             String order, String value) {
-
-        System.out.println("Message port: " + port + " host " + host
-                + " order " + order + " value " + value);
 
         try {
 
@@ -38,8 +36,8 @@ public class MessageUtils {
 
             System.out.print(soapMessageToString(soapMessage));
             return soapMessageToString(soapMessage);
-
-        } catch (Exception e) {
+ 
+        } catch (ArrayIndexOutOfBoundsException | IllegalAccessError | SOAPException e) {
             System.out.print(e.getMessage());
         }
 
@@ -50,16 +48,16 @@ public class MessageUtils {
         String result = null;
 
         if (message != null) {
-            ByteArrayOutputStream baos = null;
+            ByteArrayOutputStream byteArrayStream = null;
             try {
-                baos = new ByteArrayOutputStream();
-                message.writeTo(baos);
-                result = baos.toString();
+                byteArrayStream = new ByteArrayOutputStream();
+                message.writeTo(byteArrayStream);
+                result = byteArrayStream.toString();
             } catch (Exception e) {
             } finally {
-                if (baos != null) {
+                if (byteArrayStream != null) {
                     try {
-                        baos.close();
+                        byteArrayStream.close();
                     } catch (IOException ioe) {
                     }
                 }

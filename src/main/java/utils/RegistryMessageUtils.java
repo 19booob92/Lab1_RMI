@@ -32,8 +32,8 @@ public class RegistryMessageUtils {
 
             SOAPElement element = (SOAPElement) request.getSOAPBody()
                     .getChildElements().next();
-
-            System.out.println(element.getLocalName());
+                    
+                    System.out.println(element.getLocalName());
             System.out.println(element.getValue());
 
             order = new MessageTuple(element.getLocalName(), element.getValue());
@@ -55,7 +55,7 @@ public class RegistryMessageUtils {
     public static String prepareMessageForFetchingObjects(String list,
             int port, String host) {
 
-        String order = "PortList";
+        String order = "sensorsData";
         return MessageUtils.prepareMsg(port, host, order,
                 list);
 

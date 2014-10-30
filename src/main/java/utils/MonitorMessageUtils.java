@@ -10,12 +10,12 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
 
-public class SensorMessageUtils {
+public class MonitorMessageUtils {
     public static String prepareMessageForOrderToRegistring(Integer port,
-            String host, String obj) {
+            String host) {
 
-        String order = "RegistrySensor";
-        return MessageUtils.prepareMsg(port, host, order, String.valueOf(obj));
+        String order = "RegistryMonitor";
+        return MessageUtils.prepareMsg(port, host, order, String.valueOf(port));
     }
 
     public static String prepareMessageForOrderToFetchObjects(Integer port,

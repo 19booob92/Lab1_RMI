@@ -1,19 +1,24 @@
 package mainPack;
 
-import java.util.ArrayList;
+import ifaces.IRegistry;
+
+import java.util.HashMap;
+
+import com.google.gson.Gson;
 
 import utils.Connect;
-import utils.MessageUtils;
 import utils.RegistryMessageUtils;
-
+import utils.MessageUtils.MessageTuple;
 
 public class RegistryImpl extends Connect implements IRegistry {
 
-    private ArrayList<Object> sensors = new ArrayList<>();
-    private ArrayList<Object> monitors = new ArrayList<>();
-
+    public HashMap<Integer, Integer> monitors  = new HashMap<>();
+    public HashMap<Integer, Integer> sensors = new HashMap<>();
+    private int inputPort = 0;
     private static int id = 0;
 
+    private Gson gson = new Gson();
+    
     public RegistryImpl() {
         setIp("127.0.0.1");
         setPort(9999);
@@ -22,43 +27,57 @@ public class RegistryImpl extends Connect implements IRegistry {
     public int registerObject(Object object, int category)
     {
         if (category == 0) {
-            IMonitor monitor = (IMonitor) object;
-            monitors.add(monitor);
+            monitors.put(nextId(), Integer.parseInt((String) object));
             System.err.println("Registred Monitor");
             return nextId();
         } else {
-            ISensor sensor = (ISensor) object;
-            sensors.add(sensor);
-            System.err.println("Registred Sensor");
+            SensorImpl sensor = (SensorImpl) object;
+            sensors.put(nextId(), sensor.getPort());
+            System.err.println("Registred Sensor " + sensor.getPosition());
             return nextId();
         }
     }
 
     public boolean unRegister(int number) {
-        for (Object sensor : sensors) {
-            ISensor sensorImpl = (ISensor) sensor;
-            if (sensorImpl.getNumber() == number) {
-                sensors.remove(sensorImpl);
-                System.err.println("deleted " + sensorImpl.getNumber());
+        for (int sensorId : sensors.keySet()) {
+            if (sensorId == number) {
+                sensors.remove(sensorId);
+                System.err.println("deleted " + sensorId);
                 return true;
             }
         }
-        for (Object monitor : monitors) {
-            IMonitor monitorImpl = (IMonitor) monitor;
-            if (monitorImpl.getNumber() == number) {
-                sensors.remove(monitorImpl);
-                System.err.println("deleted " + monitorImpl.getNumber());
+        for (int monitorId : monitors.keySet()) {
+            if (monitorId == number) {
+                sensors.remove(monitorId);
+                System.err.println("deleted " + monitorId);
                 return true;
             }
         }
         return false;
     }
 
-    public ArrayList<Object> getObjects(int category) {
+    public void getObjects(int category) {
+
+        StringBuilder sensorsString = new StringBuilder();
+        
         if (category == 0) {
-            return monitors;
+            for (Integer sId : monitors.keySet()) {
+                sensorsString.append(sId);
+                sensorsString.append(",");
+            }
+            System.err.println("Numer portu sensora :" + inputPort);
+            write(RegistryMessageUtils.prepareMessageForFetchingObjects(
+                    sensorsString.toString(), getPort(),
+                    getIp()), inputPort);
         } else {
-            return sensors;
+            for (Integer sId : sensors.keySet()) {
+                sensorsString.append(sId);
+                sensorsString.append(",");
+            }
+            System.err.println("Numer portu monitora :" + inputPort);
+            write(RegistryMessageUtils.prepareMessageForFetchingObjects(
+                    sensorsString.toString(), getPort(),
+                    getIp()), inputPort);
         }
     }
 
@@ -68,18 +87,20 @@ public class RegistryImpl extends Connect implements IRegistry {
 
     @Override
     public void checkRequest(String inputMessage) {
-        MessageUtils.MessageTuple order = RegistryMessageUtils.parseMessage(inputMessage);
+        System.err.println("dostalem : " + inputMessage);
         
-        System.err.println("dostalm : " + inputMessage);
+        MessageTuple body = RegistryMessageUtils.parseMessage(inputMessage);
         
-        switch (inputMessage) {
+        switch (body.getRequest()) {
         case "RegistrySensor":
-            registerObject(order.getContent(), 1);
+            SensorImpl sensorsToAdd = gson.fromJson(body.getContent(), SensorImpl.class);
+            registerObject(sensorsToAdd, 1);
             break;
         case "RegistryMonitor":
-            registerObject(order.getContent(), 0);
+            registerObject(body.getContent(), 0);
             break;
-        case "getSensors":
+        case "GetSensors":
+            inputPort = Integer.parseInt(body.getContent());
             getObjects(1);
             break;
         }

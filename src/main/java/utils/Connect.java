@@ -10,12 +10,12 @@ import java.net.Socket;
 
 public abstract class Connect {
 
-    private int port = 9999;
-    private String ip = "127.0.0.1";
+    private int port;
+    private String ip;
 
     public void checkConnections() throws IOException {
         ServerSocket socket = new ServerSocket(port);
-        System.out.println("Read");
+        System.out.println("Czekam na polaczenia...");
 
         try {
             Socket client = socket.accept();
@@ -44,7 +44,6 @@ public abstract class Connect {
             }
 
             input.close();
-            System.out.println("Got message: " + inputString.toString());
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -71,7 +70,7 @@ public abstract class Connect {
         try {
             Socket socket = new Socket(ip, port);
             PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
-
+            
             writer.println(message);
 
             writer.close();

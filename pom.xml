@@ -3,4 +3,12 @@
   <groupId>RMI_Lab1</groupId>
   <artifactId>RMI_Lab1</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  
+  <dependencies>
+  <dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.2.4</version>
+		</dependency>
+  </dependencies>
 </project>

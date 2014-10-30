@@ -1,10 +1,11 @@
 package view;
 
+import ifaces.ISensor;
+
 import java.awt.EventQueue;
 
 import javax.swing.JButton;
 
-import mainPack.ISensor;
 import mainPack.SensorImpl;
 
 
@@ -77,7 +78,7 @@ public class SensorWindow extends SuperView {
 
         this.refreshBtn.addActionListener(l -> {
             try {
-                sensor.stateChange();
+//                sensor.stateChange();
                 System.err.println("State is changed");
             } catch (Exception e) {
                 e.printStackTrace();

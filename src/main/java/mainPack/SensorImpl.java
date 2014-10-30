@@ -1,24 +1,38 @@
 package mainPack;
 
+import ifaces.IRegistry;
+import ifaces.ISensor;
+
+import java.beans.Transient;
+import java.io.Serializable;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import com.google.gson.Gson;
+
 import utils.Connect;
 import utils.MessageUtils;
 import utils.SensorMessageUtils;
+import utils.finals;
 
 
-public class SensorImpl extends Connect implements ISensor {
+public class SensorImpl extends Connect implements ISensor, Serializable {
 
+    private static final long serialVersionUID = 11234443L;
+    
     private String position;
-    private Random random;
-    private ScheduledExecutorService scheduler;
-    private int number;
-    private String read;
 
-    protected IRegistry remoteRegistry;
+    private transient Random random;
+    private transient ScheduledExecutorService scheduler;
+    private int number;
+    private transient String read;
+
+    private transient Gson gson = new Gson();
+    
+    protected transient IRegistry remoteRegistry;
 
     public SensorImpl(String ip, int port) {
 
@@ -78,8 +92,8 @@ public class SensorImpl extends Connect implements ISensor {
 
         }, 15, 15, TimeUnit.SECONDS);
 
-        read = stringBuilder.toString();
-        write("registerSensor", 9999);
+//        read = stringBuilder.toString();
+//        write("registerSensor", finals.MASTER_PORT);
     }
 
     @Override
@@ -92,18 +106,18 @@ public class SensorImpl extends Connect implements ISensor {
     }
 
     @Override
-    public void stateChange() {
-        for (Object monitor : remoteRegistry.getObjects(0)) {
-            IMonitor monitorImpl = (IMonitor) monitor;
-            monitorImpl.stateChange();
-        }
+    public void stateChange(List<String> sensors) {
+//        for (Object monitor : remoteRegistry.getObjects(0)) {
+//            IMonitor monitorImpl = (IMonitor) monitor;
+//            monitorImpl.stateChange();
+//        }
     }
 
     @Override
     public void register() {
         String message = SensorMessageUtils.prepareMessageForOrderToRegistring(getPort(),
-                getIp());
-        write(message, 9999);
+                getIp(), gson.toJson(this));
+        write(message, finals.MASTER_PORT);
     }
 
     @Override
@@ -120,7 +134,7 @@ public class SensorImpl extends Connect implements ISensor {
             setNumber(Integer.parseInt(order.getContent()));
             break;
         case "getData":
-            stateChange();
+//            stateChange();
             break;
         }
     }
