@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import loaders.MyClassLoader;
+
 
 public class MainLoader {
 
@@ -23,12 +25,17 @@ public class MainLoader {
 
     public static void main(String args[]) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
             NoSuchMethodException, SecurityException, ClassNotFoundException {
-        ClassLoader classLoader = MainLoader.class.getClassLoader();
-        // getOneClass(classLoader);
+        ClassLoader classLoader = new MyClassLoader();
+        getOneClass(classLoader);
+        getClasses(classLoader);
+    }
+
+
+    private static void getClasses(ClassLoader classLoader) throws ClassNotFoundException {
         List<String> results = new ArrayList<String>();
         List<Class> clases = new ArrayList<Class>();
 
-        File[] files = new File("/home/booob/Documents/workspace-sts-3.5.1.RELEASE/ClassLoaders/bin/clazzPack").listFiles();
+        File[] files = new File("/home/booob/Documents/workspace-sts-3.5.1.RELEASE/Lab3_ClassLoaders/bin/clazzPack").listFiles();
 
         for (File file : files) {
             if (file.isFile()) {
@@ -37,15 +44,20 @@ public class MainLoader {
         }
 
         for (String classFile : results) {
-            Class classToLoad = classLoader.loadClass(classFile);
+            String clazzName = "clazzPack." + classFile.split("\\.")[0];
+            Class classToLoad = classLoader.loadClass(clazzName);
             List<Annotation> annotationLists = Arrays.asList(classToLoad.getAnnotations());
             for (Annotation a : annotationLists) {
-                if (a.getClass().equals("Ciastko")) {
+                String annoName = a.annotationType().getName().split("\\.")[1];
+                if (annoName.equals("Ciastko")) {
                     clases.add(classToLoad);
+                } else {
+                    // load out
                 }
+
             }
         }
-
+        System.err.println(clases);
     }
 
 
@@ -60,8 +72,9 @@ public class MainLoader {
             Object a = new clazzPack.Klasa();
 
             clazzPack.Klasa k = (clazzPack.Klasa) a;
-
-            aClass.getMethod("biegaj", String.class, int.class).invoke(a, new Object[] { "bieg", 5 });
+            Method metoda = aClass.getDeclaredMethod("biegaj", String.class, int.class);
+            metoda.setAccessible(true);
+            metoda.invoke(a, new Object[] { "bieg", 5 });
 
             Method[] methods = aClass.getMethods();
             printMethodsNames(methods);
