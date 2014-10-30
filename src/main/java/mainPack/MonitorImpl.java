@@ -12,6 +12,8 @@ import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gson.Gson;
+
 import utils.Connect;
 import utils.MessageUtils;
 import utils.MonitorMessageUtils;
@@ -23,6 +25,8 @@ public class MonitorImpl extends Connect implements IMonitor {
 
     private static final long serialVersionUID = -1994726035869244103L;
     private int number;
+
+    private Gson gson = new Gson();
 
     protected IRegistry remoteRegistry;
 
@@ -96,10 +100,15 @@ public class MonitorImpl extends Connect implements IMonitor {
 
         switch (order.getRequest()) {
         case "sensorsData":
-            System.err.println("informacje o sensorach \n\n");
             stateChange(convertStringToString(order.getContent()));
+            break;
+        case "StatusChanged":
+            SensorImpl sensor = gson.fromJson(order.getContent(), SensorImpl.class);
+            System.out.println("Zmieniono stan sensora na porcie : "
+                    + sensor.getPort()
+                    + " o id: " + sensor.getNumber() + " pozycja "
+                    + sensor.getPosition());
             break;
         }
     }
-
 }

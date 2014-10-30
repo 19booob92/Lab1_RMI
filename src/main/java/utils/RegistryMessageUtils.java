@@ -52,10 +52,19 @@ public class RegistryMessageUtils {
                 "localhost");
     }
 
-    public static String prepareMessageForFetchingObjects(String list,
+    public static String prepareMessageForSendingSensors(String list,
             int port, String host) {
 
         String order = "sensorsData";
+        return MessageUtils.prepareMsg(port, host, order,
+                list);
+
+    }
+    
+    public static String prepareMessageForSendingMonitors(String list,
+            int port, String host) {
+
+        String order = "moitorData";
         return MessageUtils.prepareMsg(port, host, order,
                 list);
 

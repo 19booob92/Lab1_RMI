@@ -9,6 +9,8 @@ import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
+import mainPack.SensorImpl;
+
 
 public class SensorMessageUtils {
     public static String prepareMessageForOrderToRegistring(Integer port,
@@ -17,11 +19,18 @@ public class SensorMessageUtils {
         String order = "RegistrySensor";
         return MessageUtils.prepareMsg(port, host, order, String.valueOf(obj));
     }
+    
+    public static String prepareMessageForStatusChanged(Integer port,
+            String host, String sensor) {
+
+        String order = "StatusChanged";
+        return MessageUtils.prepareMsg(port, host, order, sensor);
+    }
 
     public static String prepareMessageForOrderToFetchObjects(Integer port,
             String host) {
 
-        String order = "GetSensors";
+        String order = "GetMonitors";
         return MessageUtils.prepareMsg(port, host, order, String.valueOf(port));
     }
 

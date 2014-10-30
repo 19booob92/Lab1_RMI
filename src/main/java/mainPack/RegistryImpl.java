@@ -61,12 +61,12 @@ public class RegistryImpl extends Connect implements IRegistry {
         StringBuilder sensorsString = new StringBuilder();
         
         if (category == 0) {
-            for (Integer sId : monitors.keySet()) {
-                sensorsString.append(sId);
+            for (Integer port : monitors.values()) {
+                sensorsString.append(port);
                 sensorsString.append(",");
             }
             System.err.println("Numer portu sensora :" + inputPort);
-            write(RegistryMessageUtils.prepareMessageForFetchingObjects(
+            write(RegistryMessageUtils.prepareMessageForSendingSensors(
                     sensorsString.toString(), getPort(),
                     getIp()), inputPort);
         } else {
@@ -75,7 +75,7 @@ public class RegistryImpl extends Connect implements IRegistry {
                 sensorsString.append(",");
             }
             System.err.println("Numer portu monitora :" + inputPort);
-            write(RegistryMessageUtils.prepareMessageForFetchingObjects(
+            write(RegistryMessageUtils.prepareMessageForSendingSensors(
                     sensorsString.toString(), getPort(),
                     getIp()), inputPort);
         }
@@ -102,6 +102,10 @@ public class RegistryImpl extends Connect implements IRegistry {
         case "GetSensors":
             inputPort = Integer.parseInt(body.getContent());
             getObjects(1);
+            break;
+        case "GetMonitors":
+            inputPort = Integer.parseInt(body.getContent());
+            getObjects(0);
             break;
         }
     }

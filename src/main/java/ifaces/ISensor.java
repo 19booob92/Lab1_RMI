@@ -10,4 +10,5 @@ public interface ISensor extends MainInterface {
 	void setPosition(String position);
 	String getPosition();
 	int getNumber();
+	void stateChange();
 }
