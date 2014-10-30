@@ -16,7 +16,7 @@ public class RegistryMessageUtils {
     public static String prepareMessageForRegistringObject(Integer id,
             Integer port, String host) {
 
-        String order = "Number";
+        String order = "setNumber";
         return MessageUtils.prepareMsg(port, host, order,
                 String.valueOf(id));
     }
@@ -63,7 +63,6 @@ public class RegistryMessageUtils {
     
     public static String prepareMessageForSendingMonitors(String list,
             int port, String host) {
-
         String order = "moitorData";
         return MessageUtils.prepareMsg(port, host, order,
                 list);

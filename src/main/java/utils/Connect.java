@@ -59,7 +59,11 @@ public abstract class Connect {
 
             @Override
             public void run() {
-                checkRequest(inputString.toString());
+                try{
+                    checkRequest(inputString.toString());
+                } catch (Exception e) {
+                    System.out.println("Nie można nawiązać połączenia");
+                }
             }
         };
         invoke.start();

@@ -19,6 +19,13 @@ public class SensorMessageUtils {
         String order = "RegistrySensor";
         return MessageUtils.prepareMsg(port, host, order, String.valueOf(obj));
     }
+
+    public static String prepareMessageForOrderToUnRegistring(Integer port,
+            String host, String obj) {
+        
+        String order = "UnRegistrySensor";
+        return MessageUtils.prepareMsg(port, host, order, String.valueOf(obj));
+    }
     
     public static String prepareMessageForStatusChanged(Integer port,
             String host, String sensor) {

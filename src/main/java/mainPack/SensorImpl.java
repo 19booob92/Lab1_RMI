@@ -3,6 +3,7 @@ package mainPack;
 import ifaces.IRegistry;
 import ifaces.ISensor;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,14 +34,24 @@ public class SensorImpl extends Connect implements ISensor, Serializable {
 
     private transient Gson gson = new Gson();
     private List<String> monitors = new ArrayList<>();
-    protected transient IRegistry remoteRegistry;
 
     public SensorImpl(String ip, int port) {
 
         setIp(ip);
         setPort(port);
         System.out.println("Tworzenie sensrora: " + port + "  " + ip);
-        (new Thread()).start();
+        Thread listenThread = new Thread() {
+
+            @Override
+            public void run() {
+                try {
+                    checkConnections();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        listenThread.start();
 
         setPosition("0,0");
         scheduler = Executors.newScheduledThreadPool(1);
@@ -106,11 +117,12 @@ public class SensorImpl extends Connect implements ISensor, Serializable {
 
     @Override
     public void stateChange() {
-        
+        getMonitors();
         for (String monitorPort : monitors) {
             String message = SensorMessageUtils.prepareMessageForStatusChanged(getPort(),
                     getIp(), gson.toJson(this));
             write(message, Integer.parseInt(monitorPort));
+            System.err.println("Wysyłam message : " + message);
         }
 
     }
@@ -129,14 +141,15 @@ public class SensorImpl extends Connect implements ISensor, Serializable {
 
     @Override
     public void unregister() {
-        remoteRegistry.unRegister(this.number);
+        String message = SensorMessageUtils.prepareMessageForOrderToUnRegistring(getPort(), getIp(), String.valueOf(getNumber()));
+        write(message, finals.MASTER_PORT);
     }
 
     @Override
     public void checkRequest(String inputMessage) {
         MessageUtils.MessageTuple order = SensorMessageUtils.parseMessage(inputMessage);
 
-        switch (inputMessage) {
+        switch (order.getRequest()) {
         case "setNumber":
             setNumber(Integer.parseInt(order.getContent()));
             break;
