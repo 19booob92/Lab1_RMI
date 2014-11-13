@@ -1,1 +1,0 @@
-gcc -o dll.so -lc -shared -I/usr/lib/jvm/java-1.7.0-openjdk-i386/include -I/usr/lib/jvm/java-1.7.0-openjdk-i386/include/linux  kodWC.c -fPIC
