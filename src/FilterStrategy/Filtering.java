@@ -21,7 +21,7 @@ public class Filtering {
 		this.jsFilter =	Files.newBufferedReader(Paths.get("/home/booob/workspace/GraphicModifier/src/js/" + string), StandardCharsets.UTF_8);
 	}
 	
-	public ImageIcon getImageWithFilter(ImageIcon imgIco) throws ScriptException, NoSuchMethodException {
+	public BufferedImage getImageWithFilter(BufferedImage imgIco) throws ScriptException, NoSuchMethodException {
 		ScriptEngineManager manager = new ScriptEngineManager();
 		ScriptEngine engine = manager.getEngineByName("JavaScript");
 
@@ -29,12 +29,7 @@ public class Filtering {
 		
 		Invocable inv = (Invocable) engine;
 
-		ImageIcon returnedImage = (ImageIcon) inv.invokeFunction("doFilter", imgIco);
-		
-		System.err.println(returnedImage.getIconHeight());
-		
-		imgIco.getImage();
-		
+		BufferedImage returnedImage = (BufferedImage) inv.invokeFunction("doFilter", imgIco);
 		
 		return returnedImage;
 	}
