@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+
+import com.pwr.lab8.queries.CreateQueries;
+import com.pwr.lab8.queries.InsertQueries;
+import com.pwr.lab8.queries.SelectQueries;
 
 
 public class CreateConnectionToDB {

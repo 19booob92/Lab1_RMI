@@ -49,5 +49,10 @@ public class Car implements Serializable{
     public void setReservation(long reservation) {
         this.reservation = reservation;
     }
+
+    @Override
+    public String toString() {
+        return "Car [id=" + id + ", number=" + number + ", reservation=" + reservation + "]";
+    }
     
 }
